@@ -76,10 +76,10 @@ export const Counter2 = (props:Counter2PropsType) => {
                 <Container fixed>
                     <Grid container spacing={5}>
                         <Grid item xs={6}>
-                            <SuperButton onClickHandler={IncHandler}  disabledBut ={false} text={"INC"} />
+                            <SuperButton onClickHandler={IncHandler} disabledBut ={(props.error || props.enterMessage)} text={"INC"} />
                         </Grid>
                         <Grid item xs={6}>
-                            <SuperButton onClickHandler={ResetHandler} disabledBut ={false} text={"RESET"} />
+                            <SuperButton onClickHandler={ResetHandler} disabledBut ={props.enterMessage} text={"RESET"} />
                         </Grid>
                     </Grid>
                 </Container>

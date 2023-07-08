@@ -3,6 +3,8 @@ import s from './Counter1.module.css';
 import TextField from '@mui/material/TextField';
 
 import SuperButton from './SuperButton';
+
+
 type Counter1PropsType = {
     maxValue:number;
     minValue:number;
@@ -14,30 +16,26 @@ type Counter1PropsType = {
     setEnterMessage:(value:boolean)=>void;
     error:boolean;
     setError:(value:boolean)=>void;
-
 }
+
 export const Counter1 = (props:Counter1PropsType) => {
     let [innerMaxValue, setMaxValue] = useState<string>("5");
     let [innerMinValue, setMinValue] = useState<string>('0');
-    let [disabledBut, setDisabledBut]=useState<boolean>(true)
-
-
-
+    let [disabledBut, setDisabledBut]=useState<boolean>(true);
 
     const onChangeMaxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-
-        setMaxValue((e.currentTarget.value));
-        props.setEnterMessage (true);
+        setMaxValue(e.currentTarget.value);
+        props.setEnterMessage(true);
         props.SetIncorrect(false);
         setDisabledBut(false);
-
     };
 
     const onChangeMinHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setMinValue((e.currentTarget.value));
-        props.setEnterMessage (true);
+        setMinValue(e.currentTarget.value);
+        props.setEnterMessage(true);
         setDisabledBut(false);
     };
+
     useEffect(() => {
         if (parseInt(innerMaxValue) <= parseInt(innerMinValue)) {
             props.SetIncorrect(true);
@@ -46,7 +44,6 @@ export const Counter1 = (props:Counter1PropsType) => {
         }
     }, [innerMaxValue, innerMinValue, props.SetIncorrect]);
 
-    //this hook get values from local storage in case og refresh page//
     useEffect(() => {
         const savedMaxValue = localStorage.getItem('maxValue');
         const savedMinValue = localStorage.getItem('minValue');
@@ -57,7 +54,7 @@ export const Counter1 = (props:Counter1PropsType) => {
         }
     }, []);
 
-    const setRange=()=>{
+    const setRange = () => {
         const parsedMaxValue = JSON.parse(innerMaxValue);
         const parsedMinValue = JSON.parse(innerMinValue);
 
@@ -70,8 +67,9 @@ export const Counter1 = (props:Counter1PropsType) => {
         props.setEnterMessage(false)
         props.setError(false);
         setDisabledBut(true);
-
     }
+
+
 
     return (
         <div className={s.container}>
@@ -83,6 +81,7 @@ export const Counter1 = (props:Counter1PropsType) => {
                         label="Max Value"
                         variant="filled"
                         size="small"
+                        type="number"
                         className={s.TextField}
                         error={props.incorrectMessage}
                         style={{
@@ -90,8 +89,9 @@ export const Counter1 = (props:Counter1PropsType) => {
                             borderRadius: '5px',
                         }}
                         inputProps={{
-                            style: !props.incorrectMessage? { background: '#AAD7F5FF', color: '#000' }
-                                : { background: 'red', color: '#000' }
+                            style: !props.incorrectMessage ? { background: '#AAD7F5FF', color: '#000' }
+                                : { background: 'red', color: '#000' },
+
                         }}
                         value={innerMaxValue}
                         onChange={onChangeMaxHandler}
@@ -104,6 +104,7 @@ export const Counter1 = (props:Counter1PropsType) => {
                         label="Start Value"
                         variant="filled"
                         size="small"
+                        type="number"
                         className={s.TextField}
                         error={props.incorrectMessage}
                         style={{
@@ -111,7 +112,7 @@ export const Counter1 = (props:Counter1PropsType) => {
                             borderRadius: '5px',
                         }}
                         inputProps={{
-                            style: !props.incorrectMessage? { background: '#AAD7F5FF', color: '#000' }
+                            style: !props.incorrectMessage ? { background: '#AAD7F5FF', color: '#000' }
                                 : { background: 'red', color: '#000' }
                         }}
                         value={innerMinValue}
