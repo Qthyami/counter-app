@@ -19,6 +19,7 @@ type Counter1PropsType = {
 export const Counter1 = (props:Counter1PropsType) => {
     let [innerMaxValue, setMaxValue] = useState<string>("5");
     let [innerMinValue, setMinValue] = useState<string>('0');
+    let [disabledBut, setDisabledBut]=useState<boolean>(true)
 
 
 
@@ -27,13 +28,15 @@ export const Counter1 = (props:Counter1PropsType) => {
 
         setMaxValue((e.currentTarget.value));
         props.setEnterMessage (true);
-        props.SetIncorrect(false)
+        props.SetIncorrect(false);
+        setDisabledBut(false);
 
     };
 
     const onChangeMinHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setMinValue((e.currentTarget.value));
         props.setEnterMessage (true);
+        setDisabledBut(false);
     };
     useEffect(() => {
         if (parseInt(innerMaxValue) <= parseInt(innerMinValue)) {
@@ -42,17 +45,32 @@ export const Counter1 = (props:Counter1PropsType) => {
             props.SetIncorrect(false);
         }
     }, [innerMaxValue, innerMinValue, props.SetIncorrect]);
-    // const setToLocalStorage = () => {
-    //     // localStorage.setItem('setMaxValue', maxValue);
-    //     // localStorage.setItem('setMinValue', minValue);
-    //
-    //
-    // };
+
+    //this hook get values from local storage in case og refresh page//
+    useEffect(() => {
+        const savedMaxValue = localStorage.getItem('maxValue');
+        const savedMinValue = localStorage.getItem('minValue');
+
+        if (savedMaxValue && savedMinValue) {
+            setMaxValue(savedMaxValue);
+            setMinValue(savedMinValue);
+        }
+    }, []);
+
     const setRange=()=>{
-        props.onMinValueChange(JSON.parse(innerMinValue));
-        props.onMaxValueChange(JSON.parse(innerMaxValue))
+        const parsedMaxValue = JSON.parse(innerMaxValue);
+        const parsedMinValue = JSON.parse(innerMinValue);
+
+        props.onMinValueChange(parsedMinValue);
+        props.onMaxValueChange(parsedMaxValue);
+
+        localStorage.setItem('maxValue', JSON.stringify(parsedMaxValue));
+        localStorage.setItem('minValue', JSON.stringify(parsedMinValue));
+
         props.setEnterMessage(false)
-        props.setError(false)
+        props.setError(false);
+        setDisabledBut(true);
+
     }
 
     return (
@@ -102,7 +120,7 @@ export const Counter1 = (props:Counter1PropsType) => {
                 </div>
             </div>
             <div className={s.buttonRectangle}>
-                <SuperButton text={'SET'} onClickHandler={setRange} />
+                <SuperButton disabledBut={disabledBut} text={'SET'} onClickHandler={setRange} />
             </div>
         </div>
     );

@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 type ButtonPropsType = {
     text: string;
     onClickHandler: () => void;
+    disabledBut: boolean;
 };
 
 const SuperButton = (props: ButtonPropsType) => {
@@ -12,7 +13,9 @@ const SuperButton = (props: ButtonPropsType) => {
             <Button
                 onClick={props.onClickHandler}
                 variant="contained"
-                style={{ background: "#189ec6", color: "#383232" }}
+                disabled={props.disabledBut}
+                style={{ color: "#100f0f" }}
+
             >
                 {props.text}
             </Button>

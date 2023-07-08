@@ -14,6 +14,17 @@ export const Counter2 = (props:Counter2PropsType) => {
 
 
     let [value, setValue] = useState<number>(props.minValue);
+    //hook gets value from local storage on refresh page
+    useEffect(() => {
+        localStorage.setItem('counterValue', value.toString());
+    }, [value]);
+
+    useEffect(() => {
+        const savedValue = localStorage.getItem('counterValue');
+        if (savedValue) {
+            setValue(JSON.parse(savedValue));
+        }
+    }, [localStorage.getItem('counterValue')]);
 
     useEffect(() => {
         if (value < props.minValue || value > props.maxValue) {
@@ -42,7 +53,7 @@ export const Counter2 = (props:Counter2PropsType) => {
     }
     const Ekran = () => {
         if (props.incorrectMessage) {
-            return <div>Incorrect value!</div>;
+            return <div style={{color:'red'}}>Incorrect value!</div>;
         } if (props.enterMessage) {
             return <div style={{fontSize: 15}}>enter values and press 'set'</div>;
         }
@@ -65,10 +76,10 @@ export const Counter2 = (props:Counter2PropsType) => {
                 <Container fixed>
                     <Grid container spacing={5}>
                         <Grid item xs={6}>
-                            <SuperButton onClickHandler={IncHandler} text={"INC"} />
+                            <SuperButton onClickHandler={IncHandler}  disabledBut ={false} text={"INC"} />
                         </Grid>
                         <Grid item xs={6}>
-                            <SuperButton onClickHandler={ResetHandler} text={"RESET"} />
+                            <SuperButton onClickHandler={ResetHandler} disabledBut ={false} text={"RESET"} />
                         </Grid>
                     </Grid>
                 </Container>
