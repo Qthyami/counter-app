@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import s from './Counter1.module.css';
 import TextField from '@mui/material/TextField';
 
@@ -9,6 +9,12 @@ type Counter1PropsType = {
     onMaxValueChange:(value:number)=>void;
     onMinValueChange:(value:number)=>void;
 
+    SetIncorrect:(value:boolean)=>void;
+    incorrectMessage:boolean
+    setEnterMessage:(value:boolean)=>void;
+    error:boolean;
+    setError:(value:boolean)=>void;
+
 }
 export const Counter1 = (props:Counter1PropsType) => {
     let [innerMaxValue, setMaxValue] = useState<string>("5");
@@ -16,23 +22,37 @@ export const Counter1 = (props:Counter1PropsType) => {
 
 
 
+
     const onChangeMaxHandler = (e: ChangeEvent<HTMLInputElement>) => {
+
         setMaxValue((e.currentTarget.value));
+        props.setEnterMessage (true);
+        props.SetIncorrect(false)
+
     };
 
     const onChangeMinHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setMinValue((e.currentTarget.value));
+        props.setEnterMessage (true);
     };
-
-    const setToLocalStorage = () => {
-        // localStorage.setItem('setMaxValue', maxValue);
-        // localStorage.setItem('setMinValue', minValue);
-
-
-    };
+    useEffect(() => {
+        if (parseInt(innerMaxValue) <= parseInt(innerMinValue)) {
+            props.SetIncorrect(true);
+        } else {
+            props.SetIncorrect(false);
+        }
+    }, [innerMaxValue, innerMinValue, props.SetIncorrect]);
+    // const setToLocalStorage = () => {
+    //     // localStorage.setItem('setMaxValue', maxValue);
+    //     // localStorage.setItem('setMinValue', minValue);
+    //
+    //
+    // };
     const setRange=()=>{
         props.onMinValueChange(JSON.parse(innerMinValue));
         props.onMaxValueChange(JSON.parse(innerMaxValue))
+        props.setEnterMessage(false)
+        props.setError(false)
     }
 
     return (
@@ -46,12 +66,14 @@ export const Counter1 = (props:Counter1PropsType) => {
                         variant="filled"
                         size="small"
                         className={s.TextField}
+                        error={props.incorrectMessage}
                         style={{
                             border: '2px solid #189ec6',
                             borderRadius: '5px',
                         }}
                         inputProps={{
-                            style: { background: '#AAD7F5FF', color: '#000' },
+                            style: !props.incorrectMessage? { background: '#AAD7F5FF', color: '#000' }
+                                : { background: 'red', color: '#000' }
                         }}
                         value={innerMaxValue}
                         onChange={onChangeMaxHandler}
@@ -65,12 +87,14 @@ export const Counter1 = (props:Counter1PropsType) => {
                         variant="filled"
                         size="small"
                         className={s.TextField}
+                        error={props.incorrectMessage}
                         style={{
                             border: '2px solid #189ec6',
                             borderRadius: '5px',
                         }}
                         inputProps={{
-                            style: { background: '#AAD7F5FF', color: '#000' },
+                            style: !props.incorrectMessage? { background: '#AAD7F5FF', color: '#000' }
+                                : { background: 'red', color: '#000' }
                         }}
                         value={innerMinValue}
                         onChange={onChangeMinHandler}

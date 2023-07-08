@@ -7,6 +7,9 @@ import { Container, Grid, Paper } from "@mui/material";
 function App() {
     let [maxValue, setMaxValue] = useState<number>(5);
     let [minValue, setMinValue] = useState<number>(0);
+    let[incorrectMessage, SetIncorrect] = useState<boolean>(false)
+    let [enterMessage, setEnterMessage] = useState<boolean>(false)
+    let [error,setError]=useState<boolean>(false)
 
     const handleMaxValueChange = (value:number) => {
         setMaxValue(value);
@@ -27,6 +30,14 @@ function App() {
                                 minValue={minValue}
                                 onMaxValueChange={handleMaxValueChange}
                                 onMinValueChange={handleMinValueChange}
+
+                                SetIncorrect={SetIncorrect}
+                                incorrectMessage={incorrectMessage}
+                                setEnterMessage={setEnterMessage}
+                                error={error}
+                                setError={setError}
+
+
                             />
                         </Paper>
                     </Grid>
@@ -35,6 +46,10 @@ function App() {
                             <Counter2
                                 maxValue={maxValue}
                                 minValue={minValue}
+                                incorrectMessage={incorrectMessage}
+                                enterMessage={enterMessage}
+                                setError={setError}
+                                error={error}
                             />
                         </Paper>
                     </Grid>

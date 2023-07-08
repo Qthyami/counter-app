@@ -5,45 +5,62 @@ import { Container, Grid } from "@mui/material";
 type Counter2PropsType = {
     maxValue:number;
     minValue:number;
+    incorrectMessage:boolean;
+    enterMessage:boolean;
+    setError:(value:boolean)=>void;
+    error:boolean;
 }
 export const Counter2 = (props:Counter2PropsType) => {
-    // const getMin = () => {
-    //     let minLocal = localStorage.getItem('setMinValue');
-    //     if (minLocal) {
-    //         let newMinValue = JSON.parse(minLocal);
-    //         return newMinValue;
-    //     } else {
-    //         return 0;
-    //     }
-    // };
 
-    // const getMax = () => {
-    //     let maxLocal = localStorage.getItem('setMaxValue');
-    //     if (maxLocal) {
-    //         let newMaxValue = JSON.parse(maxLocal);
-    //         return newMaxValue;
-    //     } else {
-    //         return 5;
-    //     }
-    // };
 
     let [value, setValue] = useState<number>(props.minValue);
+
     useEffect(() => {
-        if (props.minValue < value) {
+        if (value < props.minValue || value > props.maxValue) {
             setValue(props.minValue);
         }
-    }, [props.minValue]);
+    }, [value, props.minValue, props.maxValue]);
 
+
+    useEffect(()=>{
+        if (value===props.maxValue){
+            props.setError(true);
+        }
+
+    },[value])
 
     function IncHandler() {
+        if (props.incorrectMessage) {
+            return;
+        }
+        if (props.enterMessage) {
+            return;
+        }
         if (value < props.maxValue) {
             setValue(value + 1);
         }
     }
+    const Ekran = () => {
+        if (props.incorrectMessage) {
+            return <div>Incorrect value!</div>;
+        } if (props.enterMessage) {
+            return <div style={{fontSize: 15}}>enter values and press 'set'</div>;
+        }
+
+
+        else {
+            return <div>{value}</div>;
+        }
+    }
+
+    const ResetHandler = () => {
+        setValue(props.minValue);
+        props.setError(false)
+    }
 
     return (
         <div className={s.container}>
-            <div className={s.innerRectangle}>{value}</div>
+            <div className={props.error? s.innerRectangleERROR : s.innerRectangle} >{Ekran()}</div>
             <div className={s.buttonRectangle}>
                 <Container fixed>
                     <Grid container spacing={5}>
@@ -51,7 +68,7 @@ export const Counter2 = (props:Counter2PropsType) => {
                             <SuperButton onClickHandler={IncHandler} text={"INC"} />
                         </Grid>
                         <Grid item xs={6}>
-                            <SuperButton onClickHandler={() => {}} text={"RESET"} />
+                            <SuperButton onClickHandler={ResetHandler} text={"RESET"} />
                         </Grid>
                     </Grid>
                 </Container>
