@@ -5,23 +5,27 @@ import TextField from '@mui/material/TextField';
 import SuperButton from './SuperButton';
 
 
+
 type Counter1PropsType = {
-    maxValue:number;
-    minValue:number;
+    maxValue:number,
+    minValue:number,
     onMaxValueChange:(value:number)=>void;
     onMinValueChange:(value:number)=>void;
 
     SetIncorrect:(value:boolean)=>void;
     incorrectMessage:boolean
     setEnterMessage:(value:boolean)=>void;
-    error:boolean;
+
     setError:(value:boolean)=>void;
 }
 
 export const Counter1 = (props:Counter1PropsType) => {
-    let [innerMaxValue, setMaxValue] = useState<string>("5");
-    let [innerMinValue, setMinValue] = useState<string>('0');
+    let [innerMaxValue, setMaxValue] = useState<string>(String(props.maxValue));
+    let [innerMinValue, setMinValue] = useState<string>(String(props.minValue));
     let [disabledBut, setDisabledBut]=useState<boolean>(true);
+
+
+
 
     const onChangeMaxHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setMaxValue(e.currentTarget.value);

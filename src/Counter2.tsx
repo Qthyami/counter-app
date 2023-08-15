@@ -12,22 +12,28 @@ type Counter2PropsType = {
 }
 export const Counter2 = (props:Counter2PropsType) => {
 
+ const startValue=localStorage.getItem('counterValue')
+    let [value, setValue] = useState<number>(Number(startValue));
 
-    let [value, setValue] = useState<number>(props.minValue);
-    //hook gets value from local storage on refresh page
     useEffect(() => {
+
         localStorage.setItem('counterValue', value.toString());
+
     }, [value]);
 
-    useEffect(() => {
-        const savedValue = localStorage.getItem('counterValue');
-        if (savedValue) {
-            setValue(JSON.parse(savedValue));
-        }
-    }, [localStorage.getItem('counterValue')]);
+    // useEffect(() => {
+    //
+    //     const savedValue = localStorage.getItem('counterValue');
+    //     if (savedValue!==null) {
+    //
+    //         setValue(JSON.parse(savedValue));
+    //
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (value < props.minValue || value > props.maxValue) {
+
             setValue(props.minValue);
         }
     }, [value, props.minValue, props.maxValue]);
@@ -35,6 +41,7 @@ export const Counter2 = (props:Counter2PropsType) => {
 
     useEffect(()=>{
         if (value===props.maxValue){
+
             props.setError(true);
         }
 
@@ -48,6 +55,7 @@ export const Counter2 = (props:Counter2PropsType) => {
             return;
         }
         if (value < props.maxValue) {
+
             setValue(value + 1);
         }
     }
@@ -65,6 +73,7 @@ export const Counter2 = (props:Counter2PropsType) => {
     }
 
     const ResetHandler = () => {
+
         setValue(props.minValue);
         props.setError(false)
     }

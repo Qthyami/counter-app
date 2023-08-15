@@ -1,24 +1,49 @@
-import React, {useState} from 'react';
+import React from 'react';
 import s from './App.module.css';
 import { Counter1 } from "./Counter1";
 import { Counter2 } from "./Counter2";
 import { Container, Grid, Paper } from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {
+
+    enterMessageChangerAC, errorAC,
+    incorrectMessageChangerAC,
+    setMaxValueAC,
+    setMinValueAC
+} from "./State/AppStateReducer";
+import {AppRootStateType} from "./State/store";
+
 
 function App() {
-    let [maxValue, setMaxValue] = useState<number>(5);
-    let [minValue, setMinValue] = useState<number>(0);
-    let[incorrectMessage, SetIncorrect] = useState<boolean>(false)
-    let [enterMessage, setEnterMessage] = useState<boolean>(false)
-    let [error,setError]=useState<boolean>(false)
+    // let [maxValue, setMaxValue] = useState<number>(5);
+    // let [minValue, setMinValue] = useState<number>(0);
+    // let[incorrectMessage, SetIncorrect] = useState<boolean>(false)
+    // let [enterMessage, setEnterMessage] = useState<boolean>(false)
+    // let [error,setError]=useState<boolean>(false)
+    const maxValue = useSelector<AppRootStateType,number >(state=>state.AppState.maxValue);
+    const minValue = useSelector<AppRootStateType,number >(state=>state.AppState.minValue);
+    const incorrectMessage = useSelector<AppRootStateType,boolean >(state=>state.AppState.incorrectMessage);
+    const enterMessage = useSelector<AppRootStateType,boolean >(state=>state.AppState.enterMessage);
+    const error = useSelector<AppRootStateType,boolean>(state=>state.AppState.error);
+
+    const dispatch=useDispatch()
 
     const handleMaxValueChange = (value:number) => {
-        setMaxValue(value);
+        dispatch(setMaxValueAC(value));
     };
 
     const handleMinValueChange = (value:number) => {
-        setMinValue(value)
+        dispatch(setMinValueAC(value));
     };
-
+    const SetIncorrect = (value:boolean)=>{
+        dispatch(incorrectMessageChangerAC(value))
+    }
+    const setEnterMessage=(value:boolean)=>{
+        dispatch(enterMessageChangerAC(value))
+    }
+    const setError=(value:boolean)=>{
+        dispatch(errorAC(value))
+    }
     return (
         <div className={s.App}>
             <Container fixed>
@@ -34,7 +59,7 @@ function App() {
                                 SetIncorrect={SetIncorrect}
                                 incorrectMessage={incorrectMessage}
                                 setEnterMessage={setEnterMessage}
-                                error={error}
+
                                 setError={setError}
 
 
